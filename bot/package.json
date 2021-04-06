@@ -17,6 +17,7 @@
   "author": "Maye Edwin",
   "license": "MIT",
   "dependencies": {
+    "mongodb": "^3.6.5",
     "twit": "^2.2.11"
   }
 }

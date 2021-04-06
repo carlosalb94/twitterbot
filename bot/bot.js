@@ -1,3 +1,11 @@
+const MongoClient = require('mongodb').MongoClient;
+const uri =
+    'mongodb+srv://user001:WmFfDG3sVd0gcHSa@cluster0.mrjlp.mongodb.net/';
+const client = new MongoClient(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+});
+
 // Our Twitter library
 const Twit = require('twit');
 
@@ -10,10 +18,31 @@ const mediaArtsSearch = { q: '#MeetMaye', count: 100, result_type: 'recent' };
 const stream = twit.stream('statuses/filter', { track: '#vistimaBot' });
 stream.on('tweet', tweetEvent);
 
+const searchUser = (id) => {
+    return new Promise((resolve, reject) => {
+        client.connect((err) => {
+            const collection = client
+                .db('FB_IDS_DATABASE')
+                .collection('FB_IDS');
+
+            var query = { id };
+            collection.find(query).toArray((err, result) => {
+                if (err) reject(err);
+                resolve(result);
+            });
+            client.close();
+        });
+    });
+};
+
 function tweetEvent(tweet) {
     const name = tweet.user.screen_name;
     const nameID = tweet.id_str;
     const tweetText = tweet.text;
+
+    searchUser(parseInt('100000000066596')).then((res) => {
+        console.log(res);
+    });
     // startScraping(({ title, mediaName }) => {
 
     //   const file_path = "./media/" + mediaName;
