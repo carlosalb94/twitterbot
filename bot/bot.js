@@ -13,7 +13,7 @@ stream.on('tweet', tweetEvent);
 function tweetEvent(tweet) {
     const name = tweet.user.screen_name;
     const nameID = tweet.id_str;
-    console.log(tweet);
+    const tweetText = tweet.text;
     // startScraping(({ title, mediaName }) => {
 
     //   const file_path = "./media/" + mediaName;
