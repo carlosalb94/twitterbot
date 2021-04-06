@@ -1,58 +1,77 @@
 // Our Twitter library
-const Twit = require('twit');
+const Twit = require("twit");
 
 // We need to include our configuration file
-const twit = new Twit(require('../config.js'));
+const twit = new Twit(require("../config.js"));
 
 // This is the URL of a search for the latest tweets on the '#MeetMaye' hashtag.
-const mediaArtsSearch = { q: '#MeetMaye', count: 100, result_type: 'recent' };
+const mediaArtsSearch = { q: "#MeetMaye", count: 100, result_type: "recent" };
 
-const stream = twit.stream('statuses/filter', { track: '#vistimaBot' });
-stream.on('tweet', tweetEvent);
+const stream = twit.stream("statuses/filter", { track: "#vistimaBot" });
+stream.on("tweet", tweetEvent);
+
+function searchIdInTweet(tweet) {
+  let regexId = /\d+/g;
+  const arrTweet = tweet.split(" ");
+
+  const results = arrTweet.filter((el) => {
+    const isUserIdValid = regexId.test(el);
+    return isUserIdValid ? el : null;
+  });
+
+  if (results.length === 1) {
+    return results[0];
+  } else {
+    return null;
+  }
+}
 
 function tweetEvent(tweet) {
-    const name = tweet.user.screen_name;
-    const nameID = tweet.id_str;
-    const tweetText = tweet.text;
-    // startScraping(({ title, mediaName }) => {
+  //const name = tweet.user.screen_name;
+  //const nameID = tweet.id_str;
+  //const tweetText = tweet.text;
+  const tweetText = "#vistimaBot 23 1256647 abc2s2 askakska";
+  const tweetId = searchIdInTweet(tweetText);
 
-    //   const file_path = "./media/" + mediaName;
+  // startScraping(({ title, mediaName }) => {
 
-    //   T.postMediaChunked({ file_path }, (err, data, response) => {
+  //   const file_path = "./media/" + mediaName;
 
-    //     if (!err) {
-    //       const mediaIdStr = data.media_id_string;
-    //       const meta_params = { media_id: mediaIdStr };
+  //   T.postMediaChunked({ file_path }, (err, data, response) => {
 
-    //       T.post('media/metadata/create', meta_params, (err, data, response) => {
+  //     if (!err) {
+  //       const mediaIdStr = data.media_id_string;
+  //       const meta_params = { media_id: mediaIdStr };
 
-    //         if (!err) {
-    //           const reply = "@" + name + " " + title;
-    //           const params = {
-    //             status: reply,
-    //             in_reply_to_status_id: nameID,
-    //             media_ids: [mediaIdStr]
-    //           };
+  //       T.post('media/metadata/create', meta_params, (err, data, response) => {
 
-    //           T.post('statuses/update', params, (err, tweet, response) => {
+  //         if (!err) {
+  //           const reply = "@" + name + " " + title;
+  //           const params = {
+  //             status: reply,
+  //             in_reply_to_status_id: nameID,
+  //             media_ids: [mediaIdStr]
+  //           };
 
-    //             if (!err) {
-    //               console.log('Tweeted 🚀 ');
-    //             } else {
-    //               console.log("Create Tweet error " + err)
-    //             }
-    //           });
+  //           T.post('statuses/update', params, (err, tweet, response) => {
 
-    //         } else {
-    //           console.log("Create Media Tweet error " + err)
-    //         }
-    //       });
+  //             if (!err) {
+  //               console.log('Tweeted 🚀 ');
+  //             } else {
+  //               console.log("Create Tweet error " + err)
+  //             }
+  //           });
 
-    //     } else {
-    //       console.log("PostMediaChunked error " + err)
-    //     }
-    //   });
-    // })
+  //         } else {
+  //           console.log("Create Media Tweet error " + err)
+  //         }
+  //       });
+
+  //     } else {
+  //       console.log("PostMediaChunked error " + err)
+  //     }
+  //   });
+  // })
 }
 
 // // This function finds the latest tweet with the MeetMaye hashtag and retweets.
@@ -88,4 +107,5 @@ function tweetEvent(tweet) {
 // retweetLatest();
 // ...and then every hour/half thereafter. Time here is in milliseconds, so
 // 1000 ms = 1 second, 1 sec * 60 = 1 min, 1 min * 60 = 1 hour --> 1000 * 60 * 60
-// setInterval(retweetLatest, 1000 * 60 * 30);
+tweetEvent();
+setInterval(tweetEvent, 60000);
